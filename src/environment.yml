@@ -1,0 +1,18 @@
+channels:
+- conda-forge
+dependencies:
+- python=3.8
+- pip
+- pip:
+  - torchmetrics<0.7
+  - cloudpickle
+  - torch
+  - transformers
+  - pandas
+  - azureml-sdk
+  - ipadic
+  - fugashi
+  - unidic-lite
+  - sentencepiece
+  - protobuf
+name: distributed_pytorch_env
