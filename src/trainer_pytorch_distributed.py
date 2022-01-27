@@ -18,7 +18,7 @@ import torchmetrics
 from model import BERTClassificationModel
 from LivedoorDataLoader import LivedoorDatasetPreprocesser
 
-from azureml.core.run import Run
+import mlflow
 
 # seed 値の固定と決定論的アルゴリズムの使用を強制する関数
 def seed_torch(seed=42):
@@ -56,9 +56,6 @@ class TokenizerCollate:
 def cli_main():
 
     # 初期設定
-
-    ## Azure ML Run を取得
-    run = Run.get_context()
 
     ## 再現再確保のため Seed 値の固定と決定論的アルゴリズムの使用を強制
     seed, g = seed_torch()
@@ -196,7 +193,7 @@ def cli_main():
         if rank == 0:
             epoch_train_loss = train_loss.item() / len(train_dataset)
             print(f"epoch: {epoch} epoch_train_loss: {epoch_train_loss}")
-            run.log('train_loss', epoch_train_loss)
+            mlflow.log_metric('train_loss', epoch_train_loss)
 
     # 評価用の関数
     def validate(epoch):
@@ -248,8 +245,8 @@ def cli_main():
             epoch_val_acc = val_accuracy.item() / len(val_dataset)
             print(f"epoch: {epoch} epoch_val_loss: {epoch_val_loss}")
             print(f"epoch: {epoch} epoch_val_acc: {epoch_val_acc}")
-            run.log('val_loss', epoch_val_loss)
-            run.log('val_accuracy', epoch_val_acc)
+            mlflow.log_metric('val_loss', epoch_val_loss)
+            mlflow.log_metric('val_accuracy', epoch_val_acc)
 
     # epoch 数だけ学習と評価を繰り返す
     for epoch in range(1, args.epochs + 1):
