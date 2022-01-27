@@ -15,5 +15,6 @@ dependencies:
   - unidic-lite
   - sentencepiece
   - protobuf
+  - azureml-mlflow
   - mlflow
 name: distributed_pytorch_env
